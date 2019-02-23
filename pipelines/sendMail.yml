@@ -1,0 +1,41 @@
+resource_types:
+  - name: email
+    type: docker-image
+    source:
+      repository: pcfseceng/email-resource
+      tag: latest
+
+resources:
+  - name: send-an-email
+    type: email
+    source:
+      smtp:
+        host: smtp.gmail.com
+        port: "587"
+        login_auth: true
+        username: {{smtp-username}}
+        password: {{smtp-password}}
+      from: cuixuex@cn.ibm.com
+      to: [ "xuliya@cn.ibm.com", "cuixuex@cn.ibm.com"]
+
+jobs:
+  - name: send-email
+    plan:
+      - task: prep-email
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: concourse/buildroot
+              tag: git
+          run:
+            path: sh
+            args:
+            - -exc
+            - |
+              echo "Let's send a mail"
+      - put: send-an-email
+        params:
+          subject_text: "A mail sent from concourse pipeline by Matt Cui"
+          body_text: "Body: a great recourse type to send mails from concourse"
