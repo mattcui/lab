@@ -8,4 +8,5 @@ spec:
       revisionTemplate:
         spec:
           container:
-            image: gcr.io/knative-releases/github.com/knative/eventing-sources/cmd/event_display
+            #image: gcr.io/knative-releases/github.com/knative/eventing-sources/cmd/event_display
+            image: docker.io/bluebosh/event_display:v1
