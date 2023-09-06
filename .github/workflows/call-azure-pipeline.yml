@@ -41,7 +41,7 @@ jobs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",  
-                  "text": "*"Test for sending msg to slack* \nThe workflow is with status ${{ job.status }}.\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                  "text": "*Test for sending msg to slack* \nThe workflow is with status ${{ job.status }}.\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
                 }
               }  
             ]
