@@ -22,30 +22,41 @@ jobs:
     environment: dev
 
     steps:
-    - uses: Azure/pipelines@v1
-      with:
-        azure-devops-project-url: 'https://dev.azure.com/nordcloud-pat/supermaestro'
-        azure-pipeline-name: 'kone-daily-test-dev' # name of the Azure pipeline to be triggered
-        azure-devops-token: '${{ secrets.NORDCLOUD_PAT }}'
-        azure-pipeline-variables:  '{"variable1": "value1", "variable2": "value2"}' # optional stringified json
+    # - uses: Azure/pipelines@v1
+    #   with:
+    #     azure-devops-project-url: 'https://dev.azure.com/nordcloud-pat/supermaestro'
+    #     azure-pipeline-name: 'kone-daily-test-dev' # name of the Azure pipeline to be triggered
+    #     azure-devops-token: '${{ secrets.NORDCLOUD_PAT }}'
+    #     azure-pipeline-variables:  '{"variable1": "value1", "variable2": "value2"}' # optional stringified json
 
-    - name: Send notification to Slack channel
-      id: slack
-      uses: slackapi/slack-github-action@v1.24.0
-      with:
-        # This data can be any valid JSON from a previous step in the GitHub Action
-        payload: |
-          {
-            "blocks": [
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",  
-                  "text": "*Test for sending msg to slack* \nThe workflow is with status ${{ job.status }}.\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-                }
-              }  
-            ]
-          }
+    # - name: Send notification to Slack channel
+    #   id: slack
+    #   uses: slackapi/slack-github-action@v1.24.0
+    #   with:
+    #     # This data can be any valid JSON from a previous step in the GitHub Action
+    #     payload: |
+    #       {
+    #         "blocks": [
+    #           {
+    #             "type": "section",
+    #             "text": {
+    #               "type": "mrkdwn",  
+    #               "text": "*Test for sending msg to slack* \nThe workflow is with status ${{ job.status }}.\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+    #             }
+    #           }  
+    #         ]
+    #       }
+    #   env:
+    #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    - name: Slack Notification
+      uses: rtCamp/action-slack-notify@v2
       env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        # SLACK_CHANNEL: general
+        SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+        SLACK_ICON: https://github.com/rtCamp.png?size=48
+        SLACK_MESSAGE: "The workflow is with status ${{ job.status }}.\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+        SLACK_TITLE: Test for sending msg to slack
+        SLACK_USERNAME: mattcui
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
         
