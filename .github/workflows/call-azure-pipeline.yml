@@ -29,4 +29,24 @@ jobs:
         azure-devops-token: '${{ secrets.NORDCLOUD_PAT }}'
         azure-pipeline-variables:  '{"variable1": "value1", "variable2": "value2"}' # optional stringified json
 
+    - name: Send notification to Slack channel
+      id: slack
+      uses: slackapi/slack-github-action@v1.24.0
+      with:
+        # This data can be any valid JSON from a previous step in the GitHub Action
+        payload: |
+          {
+            "text": "Test for sending msg to slack",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "Test for sending msg to slack: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                }
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         
