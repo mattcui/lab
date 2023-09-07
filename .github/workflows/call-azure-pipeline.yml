@@ -22,12 +22,29 @@ jobs:
     environment: dev
 
     steps:
-    # - uses: Azure/pipelines@v1
-    #   with:
-    #     azure-devops-project-url: 'https://dev.azure.com/nordcloud-pat/supermaestro'
-    #     azure-pipeline-name: 'kone-daily-test-dev' # name of the Azure pipeline to be triggered
-    #     azure-devops-token: '${{ secrets.NORDCLOUD_PAT }}'
-    #     azure-pipeline-variables:  '{"variable1": "value1", "variable2": "value2"}' # optional stringified json
+    - uses: Azure/pipelines@v1
+      with:
+        azure-devops-project-url: 'https://dev.azure.com/nordcloud-pat/supermaestro'
+        azure-pipeline-name: 'capact-hub-manifests-release'
+        azure-devops-token: '${{ secrets.NORDCLOUD_PAT }}'
+
+    - uses: Azure/pipelines@v1
+      with:
+        azure-devops-project-url: 'https://dev.azure.com/nordcloud-pat/supermaestro'
+        azure-pipeline-name: 'kone-hub-manifests-release'
+        azure-devops-token: '${{ secrets.NORDCLOUD_PAT }}'
+
+    - uses: Azure/pipelines@v1
+      with:
+        azure-devops-project-url: 'https://dev.azure.com/nordcloud-pat/supermaestro'
+        azure-pipeline-name: 'neste-hub-manifests-release'
+        azure-devops-token: '${{ secrets.NORDCLOUD_PAT }}'
+
+    - uses: Azure/pipelines@v1
+      with:
+        azure-devops-project-url: 'https://dev.azure.com/nordcloud-pat/supermaestro'
+        azure-pipeline-name: 'pes-automation-hub-manifests-release'
+        azure-devops-token: '${{ secrets.NORDCLOUD_PAT }}'
 
     # - name: Send notification to Slack channel
     #   id: slack
