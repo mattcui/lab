@@ -55,7 +55,7 @@ jobs:
         # SLACK_CHANNEL: general
         SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
         SLACK_ICON: https://github.com/rtCamp.png?size=48
-        SLACK_MESSAGE: "Already triggerred manifest build pipelines, after they are done, manifest deployment pipelines will be triggerred and will be pending for the approval to deploy on stage and other production environments, please consider to approve or deny. \n https://dev.azure.com/nordcloud-pat/supermaestro/_build?definitionId=261 \n https://dev.azure.com/nordcloud-pat/supermaestro/_build?definitionId=328 \n https://dev.azure.com/nordcloud-pat/supermaestro/_build?definitionId=334 \n https://dev.azure.com/nordcloud-pat/supermaestro/_build?definitionId=365"
+        SLACK_MESSAGE: "\nAlready triggerred manifest build pipelines, after they are done, manifest deployment pipelines will be triggerred and will be pending for the approval to deploy on stage and other production environments, please consider to approve or deny. \n https://dev.azure.com/nordcloud-pat/supermaestro/_build?definitionId=261 \n https://dev.azure.com/nordcloud-pat/supermaestro/_build?definitionId=328 \n https://dev.azure.com/nordcloud-pat/supermaestro/_build?definitionId=334 \n https://dev.azure.com/nordcloud-pat/supermaestro/_build?definitionId=365"
         SLACK_TITLE: New manifest builds arrive, please approve to deploy
         SLACK_USERNAME: supermaestro
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
