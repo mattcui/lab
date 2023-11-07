@@ -36,6 +36,9 @@ on:
       - "**.yaml.tmpl"
     branches:
       - "master"
+  pull_request_target:
+    types:
+      - closed
 
 env:
   PR_STATUS: ${{ github.event.pull_request.merged == true && vars.PR_MERGED || vars.PR_CLOSE }}
