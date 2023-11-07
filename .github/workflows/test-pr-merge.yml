@@ -1,0 +1,52 @@
+name: Test PR Merge Action
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "**.go"
+      - "**.py"
+      - "go.mod"
+      - "go.sum"
+      - "**.graphql"
+      - ".github/workflows/**"
+      - "**.sh"
+      - "Makefile"
+      - "deploy/**"
+      - "hub-js/**"
+      - "Dockerfile"
+      - "!**.md"
+      - "**.yaml.tmpl"
+    branches:
+      - "master"
+  pull_request:
+    paths:
+      - "**.go"
+      - "**.py"
+      - "go.mod"
+      - "go.sum"
+      - "**.graphql"
+      - ".github/workflows/**"
+      - "**.sh"
+      - "Makefile"
+      - "deploy/**"
+      - "hub-js/**"
+      - "Dockerfile"
+      - "!**.md"
+      - "**.yaml.tmpl"
+    branches:
+      - "master"
+
+env:
+  PR_STATUS: ${{ github.event.pull_request.merged == true && vars.PR_MERGED || vars.PR_CLOSE }}
+
+jobs:
+  test-pr-status:
+    name: Test PR Status
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+    - name: Print PR Status
+      run: |
+        echo ${{ env.PR_STATUS }}
