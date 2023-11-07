@@ -2,23 +2,6 @@ name: Test PR Merge Action
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - "**.go"
-      - "**.py"
-      - "go.mod"
-      - "go.sum"
-      - "**.graphql"
-      - ".github/workflows/**"
-      - "**.sh"
-      - "Makefile"
-      - "deploy/**"
-      - "hub-js/**"
-      - "Dockerfile"
-      - "!**.md"
-      - "**.yaml.tmpl"
-    branches:
-      - "master"
   pull_request:
     paths:
       - "**.go"
