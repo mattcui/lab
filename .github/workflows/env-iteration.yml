@@ -14,6 +14,7 @@ jobs:
     strategy:
       matrix:
         environment: [dev, stage, pes]
+    environment: ${{ matrix.environment }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
