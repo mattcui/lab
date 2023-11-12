@@ -1,0 +1,29 @@
+on:
+  pull_request:
+    paths:
+      - keycloak-auth/user-permission.yaml
+    branches:
+      - "master"
+  pull_request_target:
+    types:
+      - closed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [dev, stage, pes]
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Set up environment
+      run: |
+        echo "Environment: ${{ matrix.environment }}"
+        export ENV=${{ matrix.environment }}
+    - name: Get credentials
+      run: |
+        echo "Credentials: ${{ vars.CREDENTIAL }}"
+        export CREDENTIAL=${{ vars.CREDENTIAL }}
+        echo "Matrix Env: ${{ matrix.environment }}"
+

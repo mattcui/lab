@@ -1,0 +1,22 @@
+environments:
+  dev:
+    groups:
+      admin:
+        - xue.cui@nordcloud.com
+      writer:
+        - xue.cui@nordcloud.com
+        - xue.cui@nordcloud.com
+  stage:
+    groups:
+      admin:
+        - xue.cui@nordcloud.com
+      writer:
+        - xue.cui@nordcloud.com
+        - xue.cui@nordcloud.com
+  pes:
+    groups:
+      admin:
+        - xue.cui@nordcloud.com
+      writer:
+        - xue.cui@nordcloud.com
+        - xue.cui@nordcloud.com
