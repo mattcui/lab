@@ -24,7 +24,7 @@ on:
       - closed
 
 env:
-  PR_STATUS: ${{ github.event.pull_request.merged == true && vars.PR_MERGED || vars.PR_CLOSE }}
+  PR_STATUS: ${{ github.event.pull_request.merged == true && vars.PR_MERGED || github.event_name }}
 
 jobs:
   test-pr-status:
