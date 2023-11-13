@@ -36,21 +36,62 @@ jobs:
       with:
         version: 'v1.23.8'
       id: install-kubectl
-
     - id: 'get-keycloak-admin-password'
       name: 'Get kcadmin secret'
       run: |
         admin_password=$(kubectl get secret --namespace "keycloak" keycloak -o jsonpath="{.data.admin-password}" | base64 -d)
         echo "KC_ADMIN_PASSWORD=$admin_password" >> $GITHUB_ENV
-
     - name: Install kcadm
       run: |
-        curl -L -o keycloak.tar.gz https://github.com/keycloak/keycloak/releases/download/22.0.5/keycloak-22.0.5.tar.gz
+        curl -L -o keycloak.tar.gz https://github.com/keycloak/keycloak/releases/download/${{ vars.KC_VERSION }}/keycloak-${{ vars.KC_VERSION }}.tar.gz
         tar xzf keycloak.tar.gz
         echo "$PWD/keycloak-22.0.5/bin" >> $GITHUB_PATH
-
-    - name: Use kcadm
+    - name: Login kcadm
       run: |
-        kcadm.sh --version
-        echo "${KC_ADMIN_PASSWORD}"
+        echo "::add-mask::${{ vars.SM_DOMAIN }}"
+        kcadm.sh config credentials --server "https://keycloak.${{ vars.SM_DOMAIN }}/" --realm master --user user --password "${{ env.KC_ADMIN_PASSWORD }}"
+    - name: Sync User/Group
+      shell: bash
+      run: |
+        set -x
 
+        # Get current group mappings
+        current_groups=$(kcadm.sh get groups -r ${{ vars.SM_REALM }} | jq -r '.[].name')
+        echo "${current_groups}"
+
+        # Parse YAML
+        desired_groups=$(yq -e '.environments.${{ vars.ENV }}.groups' keycloak-auth/user-permission.yaml)
+
+        for group_name in $(echo "${desired_groups}" | yq '. | keys | .[]'); do
+          echo "Syncing group: $group_name"
+          
+          # Get desired members
+          desired_members=$(echo "$desired_groups" | yq -e ".${group_name}.[]")
+
+          # Get current members
+          group_id=$(kcadm.sh get groups -r ${{ vars.SM_REALM }} | jq -r --arg g "$group_name" '.[] | select(.name == $g) | .id')
+          current_members=$(kcadm.sh get groups/${group_id}/members -r ${{ vars.SM_REALM }})
+
+          # Add missing members
+          for member in ${desired_members}; do
+            user_exist=$(kcadm.sh get groups/${group_id}/members -r ${{ vars.SM_REALM }} | jq -r --arg m "$member" '.[] | select(.username == $m)')
+            if [ -z "${user_exist}" ]; then
+              user_id=$(kcadm.sh get users -r ${{ vars.SM_REALM }} -q username=${member} | jq -r '.[0].id')
+              kcadm.sh update users/${user_id}/groups/${group_id} -r ${{ vars.SM_REALM }} -n
+            fi
+          done
+
+          # Remove undesired members
+          current_members_username=$(echo ${current_members} | jq -r '.[].username')
+          for member in ${current_members_username}; do
+            if ! echo ${desired_members} | grep -q ${member}; then
+              user_id=$(kcadm.sh get users -r ${{ vars.SM_REALM }} -q username=${member} | jq -r '.[0].id')
+              kcadm.sh delete users/${user_id}/groups/${group_id} -r ${{ vars.SM_REALM }}
+            fi
+          done
+        done
+    - name: 'Post PR Comment'
+      uses: mshick/add-pr-comment@v2
+      with:
+        message: |
+          ${{ vars.PR_MESSAGE }}
