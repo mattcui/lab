@@ -1,22 +1,29 @@
 environments:
   dev:
     groups:
-      admin:
+      super-admin:
         - xue.cui@nordcloud.com
-      writer:
+        - tao.zhang@nordcloud.com
+      support-reader:
         - xue.cui@nordcloud.com
+        - tao.zhang@nordcloud.com
+      support-writer:
         - xue.cui@nordcloud.com
+        - tao.zhang@nordcloud.com
   stage:
     groups:
-      admin:
+      super-admin:
         - xue.cui@nordcloud.com
-      writer:
+      support-writer:
         - xue.cui@nordcloud.com
         - xue.cui@nordcloud.com
-  pes:
+  lab:
     groups:
-      admin:
+      super-admin:
+        - tao.zhang@nordcloud.com
+      support-reader:
         - xue.cui@nordcloud.com
-      writer:
-        - xue.cui@nordcloud.com
-        - xue.cui@nordcloud.com
+        - xiao.tian@nordcloud.com
+      support-writer:
+        - lining.qu@nordcloud.com
+        - lang.guo@nordcloud.com
