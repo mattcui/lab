@@ -12,7 +12,8 @@ on:
       - closed
 
 jobs:
-  deploy:
+  sync_users:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     strategy:
       matrix:
