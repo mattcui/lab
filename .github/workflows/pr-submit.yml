@@ -34,13 +34,10 @@ jobs:
       uses: peter-evans/create-pull-request@v5
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        add-paths: 'keycloak-auth/test'
         commit-message: 'Update keycloak-auth/test'
         committer: Matt Cui <xue.cui@nordcloud.com>
         author: Matt Cui <xue.cui@nordcloud.com>
         delete-branch: true
         title: 'Update keycloak-auth/test'
         body: ''
-        branch: update-changelog
-        base: main
-
+        branch: users-${{ github.run_id }}
