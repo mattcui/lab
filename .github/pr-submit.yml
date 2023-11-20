@@ -1,0 +1,46 @@
+name: Try PR Submit
+
+on: workflow_dispatch
+
+jobs:
+  update-file:
+    runs-on: ubuntu-latest
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the changed files back to the repository.
+      contents: write
+      pull-requests: write
+    steps:
+    - uses: actions/checkout@v4
+    - uses: peterjgrainger/action-create-branch@v2.2.0
+      name: Create branch
+      env:
+        GITHUB_TOKEN: ${{ secrets.PAT }}
+      with:
+        branch: users-${{ github.run_id }}
+    - name: Update file
+      run: |
+        echo "Adding change to branch ${{ github.run_id }}" > keycloak-auth/test
+    # - uses: stefanzweifel/git-auto-commit-action@v5
+    #   with:
+    #     branch: users-${{ github.run_id }}
+    #     commit_message: 'Update keycloak-auth/test'
+    #     file_pattern: 'keycloak-auth/test'
+    #     commit_user_name: Matt Cui
+    #     commit_user_email: xue.cui@nordcloud.com
+    #     commit_author: Matt Cui <xue.cui@nordcloud.com>
+    #     create_branch: true
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        add-paths: 'keycloak-auth/test'
+        commit-message: 'Update keycloak-auth/test'
+        committer: Matt Cui <xue.cui@nordcloud.com>
+        author: Matt Cui <xue.cui@nordcloud.com>
+        delete-branch: true
+        title: 'Update keycloak-auth/test'
+        body: ''
+        branch: update-changelog
+        base: main
+
