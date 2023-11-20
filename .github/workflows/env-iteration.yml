@@ -56,11 +56,7 @@ jobs:
       run: |
         set -x
 
-        # Get current group mappings
-        current_groups=$(kcadm.sh get groups -r ${{ vars.SM_REALM }} | jq -r '.[].name')
-        echo "${current_groups}"
-
-        # Parse YAML
+        # Get desired groups
         desired_groups=$(yq -e '.environments.${{ vars.ENV }}.groups' keycloak-auth/user-permission.yaml)
 
         for group_name in $(echo "${desired_groups}" | yq '. | keys | .[]'); do
